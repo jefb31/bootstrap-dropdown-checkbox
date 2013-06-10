@@ -7,6 +7,8 @@
     <meta name="description" content="Dropdown-checkbox : " />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="javascripts/google-code-pretty/prettify.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/main.css">
 
     <title>Dropdown-checkbox</title>
   </head>
@@ -19,6 +21,7 @@
           <a id="forkme_banner" href="https://github.com/Acquisio/dropdown-checkbox">View on GitHub</a>
 
           <h1 id="project_title">Dropdown-checkbox</h1>
+          <small class="last-update">Last update 10 june 2013</small>
           <h2 id="project_tagline"></h2>
 
             <section id="downloads">
@@ -40,6 +43,55 @@
           <li>JQuery 1.9+.</li>
           <li>Bootstrap 2.3.2+ (less only for the moment)</li>
         </ul>
+        <h3>Installation</h3>
+        <p>It's so easy:<p>
+        <ol>
+          <li>Add JQuery and Bootstrap.</li>
+          <li>Add this after html body and JQuery:</br>
+            <code class="prettyprint">&#60;script type"text/javascript" src="/yourpath/dropdown-checkbox.js"&#62;&#60;/script&#62;</code>
+          </li>
+          <li>Add this after the &#60;head&#62; section:</br>
+            <code class="prettyprint">
+              &#60;link rel="stylesheet" type="text/css" href="/yourpath/"&#62;</code>
+          </li>
+        </ol>
+        <p>You're done! Good job :)</p>
+        <h3>Usage</h3>
+        <p>In order to create our dropdown-checbox, you just need to write this small piece of code:<p>
+        <code class="prettyprint">$("myselector").dropdownCheckbox()</code>
+        <h3>Options</h3>
+        <table>
+          <thead>
+            <tr>
+              <td>Name</td>
+              <td>Default</td>
+              <td>Mandatory</td>
+              <td>Description</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>data</td>
+              <td>[]</td>
+              <td>Yes</td>
+              <td>
+                <p>Must have these fields:</p>
+                <ul>
+                  <li>id</li>
+                  <li>label</li>
+                  <li>isChecked (optional)</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>autosearch</td>
+              <td>false</td>
+              <td>No</td>
+              <td>Allow to search when user press a key.</td>
+            </tr>
+          </tbody>
+        </table>
+
       </section>
     </div>
 
@@ -54,4 +106,6 @@
     
 
   </body>
+  <script src="javascripts/google-code-pretty/prettify.js"></script>
+  <script>prettyPrint();</script>
 </html>

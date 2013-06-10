@@ -8,8 +8,8 @@
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
     <link rel="stylesheet" type="text/css" media="screen" href="javascripts/google-code-pretty/prettify.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/main.css">
-
+    <link rel="stylesheet/less" type="text/css" media="screen" href="stylesheets/main.less">
+    <script src="javascripts/less.min.js"></script>
     <title>Dropdown-checkbox</title>
   </head>
 
@@ -21,7 +21,7 @@
           <a id="forkme_banner" href="https://github.com/Acquisio/dropdown-checkbox">View on GitHub</a>
 
           <h1 id="project_title">Dropdown-checkbox</h1>
-          <small class="last-update">Last update 10 june 2013</small>
+          <div class="last-update">Last update 10 june 2013</div>
           <h2 id="project_tagline"></h2>
 
             <section id="downloads">
@@ -34,44 +34,70 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>Introduction</h3>
-        <p>
-          Once upon a time, at the company I work for, we needed a long list by which users could check multiple items in a dropdown menu similar to Bootstrap's. So we searched the web and... found nothing good (sad). Then came an idea, THE idea to create a boostrap drowndown with checkboxes! And hence, the Dropdown-Checkbox was born.
-        </p>
+        <h3>Browser Compatibility</h3>
+        <ul>
+          <li>IE 9+</li>
+          <li>Chrome 8+</li>
+          <li>Firefox 10+</li>
+        </ul>
+        <p class="note">Note: Didn't test yet others browsers.</p>
+        <h3>Example</h3>
+        <div class="dropdown-checkbox">
+          <button class="dropdown-checkbox-toggle btn btn-primary" data-toggle="dropdown-checkbox" type="button">Dropdown Checkbox</button>
+          <div class="dropdown-checkbox-content">
+            <div class="dropdown-checkbox-header">
+              <input class="checkbox-all" type="checkbox"><input type="text" placeholder="Search" class="search"/>
+            </div>
+            <ul class="dropdown-checkbox-menu"></ul>
+          </div>
+        </div>
         <h3>Pre-requis</h3>
         <ul>
           <li>JQuery 1.9+.</li>
           <li>Bootstrap 2.3.2+ (less only for the moment)</li>
         </ul>
+        <p class="note">Note: Didn't test below these versions.</p>
         <h3>Installation</h3>
         <p>It's so easy:<p>
         <ol>
           <li>Add JQuery and Bootstrap.</li>
           <li>Add this after html body and JQuery:</br>
-            <code class="prettyprint">&#60;script type"text/javascript" src="/yourpath/dropdown-checkbox.js"&#62;&#60;/script&#62;</code>
+            <pre class="prettyprint">&#60;script type"text/javascript" src="/yourpath/dropdown-checkbox.js"&#62;&#60;/script&#62;</pre>
           </li>
           <li>Add this after the &#60;head&#62; section:</br>
-            <code class="prettyprint">
-              &#60;link rel="stylesheet" type="text/css" href="/yourpath/"&#62;</code>
+            <pre class="prettyprint">&#60;link rel="stylesheet/less" type="text/css" href="/yourpath/dropdown-checkbox.less"&#62;</pre>
           </li>
         </ol>
         <p>You're done! Good job :)</p>
         <h3>Usage</h3>
-        <p>In order to create our dropdown-checbox, you just need to write this small piece of code:<p>
-        <code class="prettyprint">$("myselector").dropdownCheckbox()</code>
+        <p>Add this html where you want:</p>
+        <pre class="prettyprint">&#60div class="dropdown-checkbox"&#62
+  &#60button class="dropdown-checkbox-toggle btn btn-primary" 
+  data-toggle="dropdown-checkbox" type="button"&#62Dropdown Checkbox&#60/button&#62
+  &#60div class="dropdown-checkbox-content"&#62
+    &#60div class="dropdown-checkbox-header"&#62
+      &#60input class="checkbox-all" type="checkbox"&#62&#60input type="text" placeholder="Search" class="search"/&#62
+    &#60/div&#62
+    &#60ul class="dropdown-checkbox-menu"&#62&#60/ul&#62
+  &#60/div&#62
+&#60/div&#62</pre>
+        <p>In order to create our dropdown-checbox, you just need to write this small piece of javascript code:<p>
+        <pre class="prettyprint">var myData = [{id: 1, label: "Test" }];<br/>$("myselector").dropdownCheckbox({ data: myData});</pre>
         <h3>Options</h3>
         <table>
           <thead>
             <tr>
-              <td>Name</td>
-              <td>Default</td>
-              <td>Mandatory</td>
-              <td>Description</td>
+              <th>Parameter</th>
+              <th>Type</th>
+              <th>Default</th>
+              <th>Required</th>
+              <th>Description</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>data</td>
+              <td>Array</td>
               <td>[]</td>
               <td>Yes</td>
               <td>
@@ -85,9 +111,24 @@
             </tr>
             <tr>
               <td>autosearch</td>
+              <td>Boolean</td>
               <td>false</td>
               <td>No</td>
-              <td>Allow to search when user press a key.</td>
+              <td>Allow to search in checkbox list when user press a key.</td>
+            </tr>
+            <tr>
+              <td>sort</td>
+              <td>Function</td>
+              <td>Nothing</td>
+              <td>No</td>
+              <td>Allow user to sort list by custom function.</td>
+            </tr>
+            <tr>
+              <td>sortOptions</td>
+              <td>Anything</td>
+              <td>Undefined</td>
+              <td>No</td>
+              <td>Allow user to pass parameters in his custom sort.</td>
             </tr>
           </tbody>
         </table>
@@ -106,6 +147,28 @@
     
 
   </body>
+  <script src="javascripts/jquery.min.js"></script>
+  <script src="javascripts/dropdown-checkbox.js"></script>
   <script src="javascripts/google-code-pretty/prettify.js"></script>
   <script>prettyPrint();</script>
+  <script>
+    var tab = [
+      { id: "1", label: "Forever.", isChecked: true },
+      { id: "2", label: "I love cheese.", isChecked: true },
+      { id: "3", label: "Meat for all", isChecked: false },
+      { id: "4", label: "Again and again", isChecked: true },
+      { id: "5", label: "Hey bro!", isChecked: true },
+      { id: "6", label: "It's working?", isChecked: false },
+      { id: "7", label: "Horse", isChecked: true },
+      { id: "8", label: "z-index", isChecked: true },
+      { id: "9", label: "language scala", isChecked: true },
+      { id: "10", label: "Yahoo", isChecked: true },
+      { id: "11", label: "yellow", isChecked: true },
+      { id: "12", label: "Gooooooooooogle", isChecked: true },
+      { id: "13", label: "NO WAY!", isChecked: false },
+      { id: "14", label: "2 times?", isChecked: true }
+    ];
+    $('.dropdown-checkbox-toggle').dropdownCheckbox({ data: tab, autosearch: true });
+  </script>
+
 </html>

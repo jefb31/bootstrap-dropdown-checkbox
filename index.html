@@ -5,7 +5,7 @@
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
     <meta name="description" content="Dropdown-checkbox : " />
-
+    <link rel="shortcut icon" href="favicon.ico" >
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
     <link rel="stylesheet" type="text/css" media="screen" href="javascripts/google-code-pretty/prettify.css">
     <link rel="stylesheet/less" type="text/css" media="screen" href="stylesheets/main.less">
@@ -21,7 +21,7 @@
           <a id="forkme_banner" href="https://github.com/Acquisio/boostrap-dropdown-checkbox">View on GitHub</a>
 
           <h1 id="project_title">Bootstrap Dropdown-checkbox</h1>
-          <div class="last-update">Last update 10 june 2013</div>
+          <div class="last-update">Last updated June 10, 2013</div>
           <h2 id="project_tagline"></h2>
 
             <section id="downloads">
@@ -40,7 +40,7 @@
           <li>Chrome 8+</li>
           <li>Firefox 10+</li>
         </ul>
-        <p class="note">Note: Didn't test yet on others browsers.</p>
+        <p class="note">Not tested on others browsers.</p>
         <h3>Example</h3>
         <div class="dropdown-checkbox">
           <button class="dropdown-checkbox-toggle btn btn-primary" data-toggle="dropdown-checkbox" type="button">Dropdown Checkbox</button>
@@ -54,14 +54,14 @@
         <h3>Requirements</h3>
         <ul>
           <li>JQuery 1.9+.</li>
-          <li>Bootstrap 2.3.2+ (less only for the moment)</li>
+          <li>Bootstrap 2.3.2+</li>
         </ul>
-        <p class="note">Note: Didn't test below these versions.</p>
+        <p class="note">Not tested below these versions.</p>
         <h3>Installation</h3>
         <p>It's so easy:<p>
         <ol>
-          <li>Add JQuery and Bootstrap.</li>
-          <li>Add this after html body and JQuery:</br>
+          <li>Add jQuery and Bootstrap.</li>
+          <li>Add this after html body and jQuery:</br>
             <pre class="prettyprint">&#60;script type"text/javascript" src="/yourpath/bootstrap-dropdown-checkbox.js"&#62;&#60;/script&#62;</pre>
           </li>
           <li>Add this after the &#60;head&#62; section:</br>
@@ -70,7 +70,6 @@
         </ol>
         <p>You're done! Good job :)</p>
         <h3>Usage</h3>
-        <p>Add this html where you want:</p>
         <pre class="prettyprint">&#60div class="dropdown-checkbox"&#62
   &#60button class="dropdown-checkbox-toggle btn btn-primary"
   data-toggle="dropdown-checkbox" type="button"&#62Dropdown Checkbox&#60/button&#62
@@ -81,7 +80,7 @@
     &#60ul class="dropdown-checkbox-menu"&#62&#60/ul&#62
   &#60/div&#62
 &#60/div&#62</pre>
-        <p>In order to create our dropdown-checbox, you just need to write this small piece of javascript code:<p>
+        <p>Then, through a jQuery selector:<p>
         <pre class="prettyprint">var myData = [{id: 1, label: "Test" }];<br/>$("myselector").dropdownCheckbox({ data: myData});</pre>
         <h3>Options</h3>
         <table>
@@ -101,7 +100,7 @@
               <td>[]</td>
               <td>Yes</td>
               <td>
-                <p>Must have these fields:</p>
+                <p>Mandatory fields:</p>
                 <ul>
                   <li>id</li>
                   <li>label</li>
@@ -114,21 +113,21 @@
               <td>Boolean</td>
               <td>false</td>
               <td>No</td>
-              <td>Allow to search in checkbox list when user press a key.</td>
+              <td>Allows to search the list after each keypress.</td>
             </tr>
             <tr>
               <td>sort</td>
               <td>Function</td>
               <td>Nothing</td>
               <td>No</td>
-              <td>Allow user to sort list by custom function.</td>
+              <td>Allows a custom sorting function.</td>
             </tr>
             <tr>
               <td>sortOptions</td>
               <td>Anything</td>
               <td>Undefined</td>
               <td>No</td>
-              <td>Allow user to pass parameters in his custom sort.</td>
+              <td>Options when sorting.</td>
             </tr>
           </tbody>
         </table>

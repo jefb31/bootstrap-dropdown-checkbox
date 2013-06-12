@@ -42,7 +42,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
     // Set options if exist
     if (typeof options === "object") {
-      this.$element.find(".dropdown-checkbox-toggle").text(options.title);
+      this.$element.text(options.title);
+      this.$element.addClass(options.btnClass);
       this.autosearch = options.autosearch;
       this.elements = options.data || [];
       this._sort = options.sort || this._sort;

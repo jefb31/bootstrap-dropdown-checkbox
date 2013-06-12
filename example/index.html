@@ -12,7 +12,15 @@
 </head>
 
 <body>
-  <div class="myDropdownCheckbox"></div>
+  <div class="dropdown-checkbox">
+    <a class="dropdown-checkbox-toggle" data-toggle="dropdown-checkbox" href="#">Dropdown trigger</a>
+    <div class="dropdown-checkbox-content">
+      <div class="dropdown-checkbox-header">
+        <input class="checkbox-all" type="checkbox"><input type="text" placeholder="Search" class="search"/>
+      </div>
+      <ul class="dropdown-checkbox-menu"></ul>
+    <div>
+  </div>
 </body>
 
 <script src="../dependencies/js/jquery.min.js"></script>
@@ -34,6 +42,6 @@
     { id: "13", label: "NO WAY!", isChecked: false },
     { id: "14", label: "2 times?", isChecked: true }
   ];
-  $('.myDropdownCheckbox').dropdownCheckbox({ data: tab, autosearch: true, title: "My Dropdown Checkbox" });
+  $('.dropdown-checkbox-toggle').dropdownCheckbox({ data: tab, autosearch: true });
 </script>
 </html>

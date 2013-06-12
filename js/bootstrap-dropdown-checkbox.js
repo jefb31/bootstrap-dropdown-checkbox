@@ -16,14 +16,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   // **********************************
   // Templates
   // **********************************
-  var template = '\
-    <a class="dropdown-checkbox-toggle" data-toggle="dropdown-checkbox" href="#">Dropdown trigger</a>\
-    <div class="dropdown-checkbox-content">\
-      <div class="dropdown-checkbox-header">\
-        <input class="checkbox-all" type="checkbox"><input type="text" placeholder="Search" class="search"/>\
-      </div>\
-      <ul class="dropdown-checkbox-menu"></ul>\
-    </div>';
   var templateOption = '<li><div class="layout"><input type="checkbox"/><label></label></div></li>';
   var templateNoResult = '<li><div class="layout"><label>No results.</label></div></li>';
 
@@ -31,18 +23,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   // Constructor
   // **********************************
   var DropdownCheckbox = function(element, options) {
-    // Create dropdown-checkbox
-    $(element).html(template);
-    $(element).addClass("dropdown-checkbox");
-
-    this.$element = $(element).find(".dropdown-checkbox-toggle");
-    this.$parent = $(element);
+    this.$element = $(element);
+    this.$parent = this.$element.parents(".dropdown-checkbox");
     this.$list = this.$parent.find("ul");
     this.elements = [];
 
     // Set options if exist
     if (typeof options === "object") {
-      this.$element.find(".dropdown-checkbox-toggle").text(options.title);
       this.autosearch = options.autosearch;
       this.elements = options.data || [];
       this._sort = options.sort || this._sort;

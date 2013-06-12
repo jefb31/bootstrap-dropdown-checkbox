@@ -17,7 +17,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   // Templates
   // **********************************
   var template = '\
-    <a class="dropdown-checkbox-toggle" data-toggle="dropdown-checkbox" href="#">Dropdown trigger</a>\
+    <button class="dropdown-checkbox-toggle" data-toggle="dropdown-checkbox" href="#">Dropdown trigger</button>\
     <div class="dropdown-checkbox-content">\
       <div class="dropdown-checkbox-header">\
         <input class="checkbox-all" type="checkbox"><input type="text" placeholder="Search" class="search"/>\

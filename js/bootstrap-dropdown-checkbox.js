@@ -219,7 +219,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       }
       else {
         elements = this._sort(elements, this.sortOptions)
-        for (var i = 0 ; i < elements.length ; i++) { this.appendOne(elements[i]) }
+        for (var i = 0 ; i < elements.length ; i++) { this._appendOne(elements[i]) }
       }
     },
 

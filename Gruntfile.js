@@ -1,16 +1,20 @@
+fs = require('fs');
+
 module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
       options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+        banner: 
+          '/*! <%= pkg.name %> - v<%= pkg.version %>\n' 
+        + fs.readFileSync('LICENSE') + '*/\n' 
       },
       dist: {
         files: {
-          'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+          'js/bootstrap-dropdown-checkbox.min.js': 'js/bootstrap-dropdown-checkbox.js'
         }
-      }
+      } 
     },
     jshint: {
       files: ['Gruntfile.js', 'js/bootstrap-dropdown-checkbox.js', 'test/**/*.js'],
@@ -26,7 +30,15 @@ module.exports = function(grunt) {
         "devel"    : true,
         "boss"     : true,
         "expr"     : true,
-        "asi"      : true
+        "asi"      : true,
+        "multistr" : true     // because of multistr template
+      }
+    },
+    less: {
+      dist: {
+        files: {
+          'css/bootstrap-dropdown-checkbox.css': 'less/bootstrap-dropdown-checkbox.less'
+        }
       }
     }
   });
@@ -36,7 +48,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-qunit');
 
-  grunt.registerTask('test', ['jshint']);
-  grunt.registerTask('default', ['jshint', 'compilecss', 'uglify']);
+  grunt.registerTask('default', ['jshint', 'less', 'uglify']);
 
 };

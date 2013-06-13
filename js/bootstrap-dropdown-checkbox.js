@@ -149,6 +149,26 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       this.reset(this.elements)
     },
 
+    _appendOne: function(item) {
+      var id = item.id
+        , label = item.label
+        , isChecked = item.isChecked
+        , uuid = new Date().getTime() * Math.random()
+
+      this.$list.append(templateOption)
+      var $last = this.$list.find("li").last()
+      $last.data("id", id)
+
+      var $checkbox = $last.find("input")
+      $checkbox.attr("id", uuid)
+      if (isChecked) $checkbox.attr("checked", "checked")
+
+      var $label = $last.find("label")
+      $label.text(label)
+      $label.attr("for", uuid)
+    },
+
+
     // ----------------------------------
     // Event methods
     // ----------------------------------
@@ -193,28 +213,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     },
 
     append: function(elements) {
-      this._isValidArray(elements)
-      elements = this._sort(elements, this.sortOptions)
-      for (var i = 0 ; i < elements.length ; i++) { this.appendOne(elements[i]) }
-    },
 
-    appendOne: function(item) {
-      var id = item.id
-          , label = item.label
-          , isChecked = item.isChecked
-          , uuid = new Date().getTime() * Math.random()
-
-      this.$list.append(templateOption)
-      var $last = this.$list.find("li").last()
-      $last.data("id", id)
-
-      var $checkbox = $last.find("input")
-      $checkbox.attr("id", uuid)
-      if (isChecked) $checkbox.attr("checked", "checked")
-
-      var $label = $last.find("label")
-      $label.text(label)
-      $label.attr("for", uuid)
+      if (!$.isArray(elements)) {
+        this._appendOne(elements)
+      }
+      else {
+        elements = this._sort(elements, this.sortOptions)
+        for (var i = 0 ; i < elements.length ; i++) { this.appendOne(elements[i]) }
+      }
     },
 
     remove: function(ids) {

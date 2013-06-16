@@ -176,7 +176,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       var keyCode = event.keyCode
           , word = $(event.target).val()
 
-      if (word.length <= 1 && keyCode === 8) return this.reset(this.elements)
+      if (word.length < 1 && keyCode === 8) return this.reset(this.elements)
       if (keyCode === 27) return this._resetSearch()
 
       if (this.autosearch || keyCode === 13) {

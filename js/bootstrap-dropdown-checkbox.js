@@ -176,12 +176,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       var keyCode = event.keyCode
           , word = $(event.target).val()
 
-      if (word.length < 1 && keyCode === 8) return this.reset(this.elements)
-      if (keyCode === 27) return this._resetSearch()
+      if (word.length < 1 && keyCode === 8) {
+        this.$parent.trigger("reset:search")
+        return this.reset(this.elements)
+      }
+      
+      if (keyCode === 27) {
+        this.$parent.trigger("reset:search")
+        return this._resetSearch()
+      }
 
       if (this.autosearch || keyCode === 13) {
         var results = this._findMatch(word, this.elements)
         if (results.length > 0) return this.reset(results)
+        this.$parent.trigger("apply:search", word)
         return this.$list.html(templateNoResult)
       }
     },
@@ -194,11 +202,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         $(this).find("input[type=checkbox]").prop("checked", isChecked)
         self._setCheckbox(isChecked, $(this).data("id"))
       })
+      isChecked ? this.$parent.trigger("check:all") : this.$parent.trigger("uncheck:all")
     },
 
     onClickCheckbox: function(event) {
       this._setCheckbox($(event.target).prop("checked"), $(event.target).parent().parent().data("id"))
       this._refreshCheckboxAll()
+      $(event.target).prop("checked") ? this.$parent.trigger("check:checkbox") : this.$parent.trigger("uncheck:checkbox")
     },
 
     // ----------------------------------
@@ -213,7 +223,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     },
 
     append: function(elements) {
-
       if (!$.isArray(elements)) {
         this._appendOne(elements)
       }
@@ -221,12 +230,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         elements = this._sort(elements, this.sortOptions)
         for (var i = 0 ; i < elements.length ; i++) { this._appendOne(elements[i]) }
       }
+      this.trigger("add", elements)
     },
 
     remove: function(ids) {
       this._isValidArray(ids)
       this._removeElements(ids)
       this.reset(this.elements)
+      this.trigger("remove", ids)
     },
 
     reset: function(elements) {
@@ -234,6 +245,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       this.$list.empty()
       this.append(elements)
       this._refreshCheckboxAll()
+      this.$parent.trigger("reset")
     }
   }
 

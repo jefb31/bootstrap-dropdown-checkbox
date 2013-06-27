@@ -107,6 +107,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   padding: 0;
 }
 .dropdown-checkbox.open .dropdown-checkbox-content li .layout label {
+  display: block;
+  white-space: nowrap;
   line-height: 25px;
   padding-left: 30px;
   margin-bottom: 0px;

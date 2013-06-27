@@ -205,14 +205,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         $(this).find("input[type=checkbox]").prop("checked", isChecked)
         self._setCheckbox(isChecked, $(this).data("id"))
       })
-      this.$parent.trigger("click:all", isChecked)
+      this.$parent.trigger("checked:all", isChecked)
       isChecked ? this.$parent.trigger("check:all") : this.$parent.trigger("uncheck:all")
     },
 
     onClickCheckbox: function(event) {
       this._setCheckbox($(event.target).prop("checked"), $(event.target).parent().parent().data("id"))
       this._refreshCheckboxAll()
-      this.$parent.trigger("click", $(event.target).prop("checked"))
+      this.$parent.trigger("checked", $(event.target).prop("checked"))
       $(event.target).prop("checked") ? this.$parent.trigger("check:checkbox") : this.$parent.trigger("uncheck:checkbox")
     },
 

@@ -39,6 +39,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 .dropdown-checkbox {
   position: relative;
 }
+.dropdown-checkbox .caret {
+  margin-top: 8px;
+}
 .dropdown-checkbox .dropdown-checkbox-content {
   z-index: 1000;
   position: absolute;

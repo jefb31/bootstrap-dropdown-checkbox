@@ -39,6 +39,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     this.$parent = $(element)
     this.$list = this.$parent.find("ul")
     this.elements = []
+    this.hasChanges = false
 
     // Set options if exist
     if (typeof options === "object") {
@@ -48,7 +49,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       this.elements = options.data || []
       this._sort = options.sort || this._sort
       this.sortOptions = options.sortOptions
-      this.hideHeader = options.hideHeader || true;
+      this.hideHeader = options.hideHeader || true
+      this.templateButton = options.templateButton
+    }
+
+    if (this.templateButton) {
+      this.$element.remove();
+      this.$parent.prepend(this.templateButton);
+      this.$element = this.$parent.find(".dropdown-checkbox-toggle")
     }
     
     if (this.hideHeader) this.$parent.find(".dropdown-checkbox-header").remove()
@@ -70,7 +78,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     // - Catch keyup events in search box
     // - Catch click on checkbox
     $(document)
-      .on('click.dropdown-checkbox.data-api', $.proxy(function () { this.$parent.removeClass('open') }, this))
+      .on('click.dropdown-checkbox.data-api', $.proxy(function () { 
+        this.$parent.removeClass('open') 
+
+        // Notify changes on close
+        if (this.hasChanges) this.$parent.trigger("change:dropdown-checkbox");
+
+        this.hasChanges = false
+      }, this))
       .on('keyup.dropdown-checkbox.data-api', '.dropdown-checkbox-header .search',
         $.proxy(DropdownCheckbox.prototype.onKeyup, this)
       )
@@ -109,11 +124,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       this.elements = tmp
     },
 
-    _setAllCheckbox: function(isChecked) {
+    _getCheckbox: function(isChecked, isAll) {
       var results = []
       this.$parent.find("li").each($.proxy(function(index, item) {
-        if ($(item).find("input[type=checkbox]").prop("checked") == isChecked) {
-          results.push(parseInt($(item).data("id"), 10))
+        if ($(item).find("input[type=checkbox]").prop("checked") == isChecked || isAll) {
+          results.push({
+            id: parseInt($(item).data("id"), 10)
+            , label: $(item).find("label").text()
+            , isChecked: $(item).find("input[type=checkbox]").prop("checked")
+          })
         }
       }, this))
       return results
@@ -204,6 +223,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       })
       this.$parent.trigger("checked:all", isChecked)
       isChecked ? this.$parent.trigger("check:all") : this.$parent.trigger("uncheck:all")
+
+      // Notify changes
+      this.hasChanges = true
     },
 
     onClickCheckbox: function(event) {
@@ -211,17 +233,24 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       this._refreshCheckboxAll()
       this.$parent.trigger("checked", $(event.target).prop("checked"))
       $(event.target).prop("checked") ? this.$parent.trigger("check:checkbox") : this.$parent.trigger("uncheck:checkbox")
+
+      // Notify changes
+      this.hasChanges = true
     },
 
     // ----------------------------------
     // External methods
     // ----------------------------------
     checked: function() {
-      return this._setAllCheckbox(true)
+      return this._getCheckbox(true)
     },
 
     unchecked: function() {
-      return this._setAllCheckbox(false)
+      return this._getCheckbox(false)
+    },
+
+    items: function() {
+      return this._getCheckbox(undefined, true)
     },
 
     append: function(elements) {
@@ -232,12 +261,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         elements = this._sort(elements, this.sortOptions)
         for (var i = 0 ; i < elements.length ; i++) { this._appendOne(elements[i]) }
       }
+
+      // Notify changes
+      this.hasChanges = true
     },
 
     remove: function(ids) {
       this._isValidArray(ids)
       this._removeElements(ids)
       this.reset(this.elements)
+
+      // Notify changes
+      this.hasChanges = true
     },
 
     reset: function(elements) {
@@ -245,6 +280,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       this.$list.empty()
       this.append(elements)
       this._refreshCheckboxAll()
+
+      // Notify changes
+      this.hasChanges = true
     }
   }
 

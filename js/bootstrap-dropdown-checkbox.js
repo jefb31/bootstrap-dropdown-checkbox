@@ -230,14 +230,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         elements = this._sort(elements, this.sortOptions)
         for (var i = 0 ; i < elements.length ; i++) { this._appendOne(elements[i]) }
       }
-      this.trigger("add", elements)
+      this.$parent.trigger("add", elements)
     },
 
     remove: function(ids) {
       this._isValidArray(ids)
       this._removeElements(ids)
       this.reset(this.elements)
-      this.trigger("remove", ids)
+      this.$parent.trigger("remove", ids)
     },
 
     reset: function(elements) {

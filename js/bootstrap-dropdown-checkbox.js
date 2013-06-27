@@ -109,7 +109,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       this.elements = tmp
     },
 
-    _setAllCheckBox: function(isChecked) {
+    _setAllCheckbox: function(isChecked) {
       var results = []
       this.$parent.find("li").each($.proxy(function(index, item) {
         if ($(item).find("input[type=checkbox]").prop("checked") == isChecked) {

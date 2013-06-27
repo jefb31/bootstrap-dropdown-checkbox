@@ -48,7 +48,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       this.elements = options.data || []
       this._sort = options.sort || this._sort
       this.sortOptions = options.sortOptions
+      this.hideHeader = options.hideHeader || true;
     }
+    
+    if (this.hideHeader) this.$parent.find(".dropdown-checkbox-header").remove()
 
     // Open panel when the link is clicked
     this.$element.on("click.dropdown-checkbox.data-api", $.proxy(function() {

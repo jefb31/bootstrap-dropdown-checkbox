@@ -105,7 +105,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 }
 .dropdown-checkbox.open .dropdown-checkbox-content li .layout label {
   line-height: 25px;
-  margin-left: 30px;
+  padding-left: 30px;
   margin-bottom: 0px;
   height: 25px;
 }

@@ -15,4 +15,5 @@ grunt
 ## Full Dropdown Checkbox with Header
 ![alt tag](http://acquisio.github.io/bootstrap-dropdown-checkbox/images/full_dbc.png)
 
+## Documentation
 Full documentation available at http://acquisio.github.io/bootstrap-dropdown-checkbox

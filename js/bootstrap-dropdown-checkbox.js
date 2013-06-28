@@ -17,7 +17,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   // Templates
   // **********************************
   var template = '\
-    <button class="dropdown-checkbox-toggle" data-toggle="dropdown-checkbox" href="#">Dropdown trigger</button>\
+    <button class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Dropdown trigger</button>\
     <div class="dropdown-checkbox-content">\
       <div class="dropdown-checkbox-header">\
         <input class="checkbox-all" type="checkbox"><input type="text" placeholder="Search" class="search"/>\
@@ -58,6 +58,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       this.$parent.prepend(this.templateButton);
       this.$element = this.$parent.find(".dropdown-checkbox-toggle")
     }
+
+    this.$element.attr("data-toggle", "dropdown")
     
     if (this.hideHeader) this.$parent.find(".dropdown-checkbox-header").remove()
 

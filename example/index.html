@@ -12,7 +12,16 @@
 </head>
 
 <body>
-  <div class="myDropdownCheckbox"></div>
+  <div class="navbar">
+          <div class="navbar-inner">
+            <a class="brand" href="#">Title</a>
+            <ul class="nav">
+              <li class="myDropdownCheckboxBasic dropdown-checkbox dropdown open"></li>
+              <li><a href="#">Link</a></li>
+              <li><a href="#">Link</a></li>
+            </ul>
+          </div>
+        </div>
 </body>
 
 <script src="../dependencies/js/jquery.min.js"></script>
@@ -34,14 +43,15 @@
     { id: "13", label: "NO WAY!", isChecked: false },
     { id: "14", label: "2 times?", isChecked: true }
   ];
-  $('.myDropdownCheckbox').dropdownCheckbox({ 
+  $('.myDropdownCheckboxBasic').dropdownCheckbox({ 
     data: tab, 
     autosearch: true, 
     title: "My Dropdown Checkbox",
-    btnClass: "btn btn-primary"
+    hideHeader: false,
+    templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Accounts<b class="caret"></b></button>'
   });
 
-  $('.myDropdownCheckbox').dropdownCheckbox("append", { id: "15", label: "added by itself", isChecked: true });
+  $('.myDropdownCheckboxBasic').dropdownCheckbox("append", { id: "15", label: "added by itself", isChecked: true });
 
 
 </script>

@@ -53,6 +53,16 @@
         </ul>
         <p class="note">Not tested on others browsers.</p>
         <h3>Example</h3>
+        <div class="navbar">
+          <div class="navbar-inner">
+            <a class="brand" href="#">Title</a>
+            <ul class="nav">
+              <li class="myDropdownCheckboxBasic"></li>
+              <li><a href="#">Link</a></li>
+              <li><a href="#">Link</a></li>
+            </ul>
+          </div>
+        </div>
         <div class="myDropdownCheckbox"></div>
         <h3>Requirements</h3>
         <ul>
@@ -126,7 +136,7 @@
               <td>title</td>
               <td>string</td>
               <td>Undefined</td>
-              <td>Yes</td>
+              <td>Yes (unless you use your own template for button)</td>
               <td>Title for button.</td>
             </tr>
             <tr>
@@ -136,14 +146,34 @@
               <td>No</td>
               <td>CSS class to customize the button.</td>
             </tr>
+            <tr>
+              <td>hideHeader</td>
+              <td>boolean</td>
+              <td>Undefined</td>
+              <td>No</td>
+              <td>Hide header (searchbox).</td>
+            </tr>
+            <tr>
+              <td>templateButton</td>
+              <td>string</td>
+              <td>Undefined</td>
+              <td>No</td>
+              <td>Custom your button. You need to have these attributes on your element: 
+                  <div>- class: "dropdown-checkbox-toggle"<br/>
+                  - data-toggle: "dropdown-checkbox"</div>
+              </td>
+            </tr>
           </tbody>
         </table>
         <h3>Methods</h3>
+        <h4>Items</h4>
+        <p>Returns the entire list of items.</p>
+        <code class="prettyprint">$("myselector").dropdownCheckbox("item");</code>
         <h4>Checked</h4>
-        <p>Returns the list of ids of the checked items.</p>
+        <p>Returns the list of items which are checked.</p>
         <code class="prettyprint">$("myselector").dropdownCheckbox("checked");</code>
         <h4>Unchecked</h4>
-        <p>Returns the array of ids of the unchecked items.</p>
+        <p>Returns the list of items which are unchecked.</p>
         <code class="prettyprint">$("myselector").dropdownCheckbox("unchecked");</code>
         <h4>Append</h4>
         <p>Appends an array of items.</p>
@@ -196,7 +226,16 @@
       { id: "13", label: "NO WAY!", isChecked: false },
       { id: "14", label: "2 times?", isChecked: true }
     ];
-    $('.myDropdownCheckbox').dropdownCheckbox({ data: tab, autosearch: true, title: "Dropdown Checkbox", btnClass: "btn btn-primary" });
+    $('.myDropdownCheckbox').dropdownCheckbox({ 
+      data: tab, 
+      autosearch: true, 
+      title: "Dropdown Checkbox", 
+      btnClass: "btn btn-primary",
+      hideHeader: false
+    });
+    $('.myDropdownCheckboxBasic').dropdownCheckbox({ 
+      data: tab,
+      templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown-checkbox" href="#">Accounts<b class="caret"></b></button>' });
   </script>
 
 </html>

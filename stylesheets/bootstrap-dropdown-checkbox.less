@@ -9,9 +9,17 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
+.navbar .nav > li {
+  list-style: none;
+}
 
+#main_content li > a:hover {
+  color: #333;
+  text-shadow: none;
+}
 .dropdown-checkbox {
   position: relative;
+  .caret { margin-top: 8px; margin-left: 2px; }
   .dropdown-checkbox-content {
     z-index: @zindexDropdown;
     position: absolute;
@@ -45,7 +53,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       margin: 0;
       list-style: none;
     }
-  }
+  }  
 }
 
 .dropdown-checkbox.open {
@@ -69,11 +77,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
           padding: 0;
         }
         label {
+          display: block;
+          white-space: nowrap;
           line-height: 25px;
-          margin-left: 30px;
+          padding-left: 30px;
           margin-bottom: 0px;
           height: 25px;
-        }
+        }  
       }
     }
   }

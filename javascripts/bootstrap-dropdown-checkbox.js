@@ -17,7 +17,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   // Templates
   // **********************************
   var template = '\
-    <button class="dropdown-checkbox-toggle" data-toggle="dropdown-checkbox" href="#">Dropdown trigger</button>\
+    <button class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Dropdown trigger</button>\
     <div class="dropdown-checkbox-content">\
       <div class="dropdown-checkbox-header">\
         <input class="checkbox-all" type="checkbox"><input type="text" placeholder="Search" class="search"/>\
@@ -33,7 +33,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   var DropdownCheckbox = function(element, options) {
     // Create dropdown-checkbox
     $(element).html(template)
-    $(element).addClass("dropdown-checkbox")
+    $(element).addClass("dropdown-checkbox dropdown")
 
     this.$element = $(element).find(".dropdown-checkbox-toggle")
     this.$parent = $(element)
@@ -58,12 +58,21 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       this.$parent.prepend(this.templateButton);
       this.$element = this.$parent.find(".dropdown-checkbox-toggle")
     }
+
+    this.$element.attr("data-toggle", "dropdown")
     
     if (this.hideHeader) this.$parent.find(".dropdown-checkbox-header").remove()
 
     // Open panel when the link is clicked
     this.$element.on("click.dropdown-checkbox.data-api", $.proxy(function() {
-      this.$parent.siblings().removeClass("open")
+      // Close dropdown-checkbox
+      this.$parent.addClass("x12x")
+      $(".dropdown-checkbox.x12x").siblings().removeClass("open")
+      this.$parent.removeClass("x12x")
+
+      // Close bootstrap dropdown
+      $(".dropdown").removeClass("open")
+
       this.$parent.toggleClass("open")
       return false
     }, this))

@@ -9,4 +9,6 @@ npm install
 grunt
 ```
 
+![alt tag](http://acquisio.github.io/bootstrap-dropdown-checkbox/images/dbc_desc.png)
+
 Full documentation available at http://acquisio.github.io/bootstrap-dropdown-checkbox

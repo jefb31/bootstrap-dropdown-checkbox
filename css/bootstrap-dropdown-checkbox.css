@@ -40,7 +40,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   position: relative;
 }
 .dropdown-checkbox.dropdown.open .caret {
-  border-top-color: #000000;
+  border-top-color: #000000 !important;
 }
 .dropdown-checkbox .caret {
   margin-top: 8px;

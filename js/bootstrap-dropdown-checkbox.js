@@ -65,14 +65,16 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
     // Open panel when the link is clicked
     this.$element.on("click.dropdown-checkbox.data-api", $.proxy(function() {
-      // Close dropdown-checkbox
-      this.$parent.addClass("x12x")
-      $(".dropdown-checkbox.x12x").siblings().removeClass("open")
+      // Remember current state
+      var isOpened = this.$parent.hasClass("open")
 
-      // Close bootstrap dropdown
-      $(".dropdown.x12x").siblings().removeClass("open")
+      // Close all dropdown (bootstrap include)
+      $(".dropdown").removeClass("open")
 
-      this.$parent.removeClass("x12x")
+      // Reset last state
+      if (isOpened) this.$parent.addClass("open")
+
+      // Switch to next state
       this.$parent.toggleClass("open")
       return false
     }, this))

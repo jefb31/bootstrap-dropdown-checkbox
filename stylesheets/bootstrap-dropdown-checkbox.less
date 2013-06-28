@@ -17,8 +17,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   color: #333;
   text-shadow: none;
 }
+
 .dropdown-checkbox {
   position: relative;
+  &.dropdown.open .caret { border-top-color: @black !important; }
   .caret { margin-top: 8px; margin-left: 2px; }
   .dropdown-checkbox-content {
     z-index: @zindexDropdown;

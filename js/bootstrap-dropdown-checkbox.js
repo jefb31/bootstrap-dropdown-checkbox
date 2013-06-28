@@ -59,9 +59,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       this.$element = this.$parent.find(".dropdown-checkbox-toggle")
     }
 
+    // Add toggle for dropdown
     this.$element.attr("data-toggle", "dropdown")
-    
+
+    // Hide searchbox if needs
     if (this.hideHeader) this.$parent.find(".dropdown-checkbox-header").remove()
+
+    // Prevent clicks on content
+    this.$parent.find(".dropdown-checkbox-content").on("click.dropdown-checkbox.data-api", function(e) { e.stopPropagation() })
 
     // Open panel when the link is clicked
     this.$element.on("click.dropdown-checkbox.data-api", $.proxy(function() {
@@ -76,6 +81,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
       // Switch to next state
       this.$parent.toggleClass("open")
+
+      // Notify changes on close
+      if (this.hasChanges) this.$parent.trigger("change:dropdown-checkbox");
+      this.hasChanges = false
+
       return false
     }, this))
 
@@ -88,21 +98,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     // - Close panel when click out
     // - Catch keyup events in search box
     // - Catch click on checkbox
-    $(document)
-      .on('click.dropdown-checkbox.data-api', $.proxy(function () { 
-        this.$parent.removeClass('open') 
+    $(document).on('click.dropdown-checkbox.data-api', $.proxy(function () { 
+      this.$parent.removeClass('open') 
 
-        // Notify changes on close
-        if (this.hasChanges) this.$parent.trigger("change:dropdown-checkbox");
+      // Notify changes on close
+      if (this.hasChanges) this.$parent.trigger("change:dropdown-checkbox");
+      this.hasChanges = false
+    }, this))
 
-        this.hasChanges = false
-      }, this))
-      .on('keyup.dropdown-checkbox.data-api', '.dropdown-checkbox-header .search',
-        $.proxy(DropdownCheckbox.prototype.onKeyup, this)
-      )
-      .delegate("li input[type=checkbox]", "click.dropdown-checkbox.data-api", $.proxy(this.onClickCheckbox, this))
+    this.$parent.find(".dropdown-checkbox-header").on('keyup.dropdown-checkbox.data-api', $.proxy(DropdownCheckbox.prototype.onKeyup, this))
+    this.$parent.find("ul").delegate("li input[type=checkbox]", "click.dropdown-checkbox.data-api", $.proxy(this.onClickCheckbox, this))
 
-    this.reset(this.elements)
+    this._reset(this.elements)
   }
 
   // **********************************
@@ -137,15 +144,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
     _getCheckbox: function(isChecked, isAll) {
       var results = []
-      this.$parent.find("li").each($.proxy(function(index, item) {
-        if ($(item).find("input[type=checkbox]").prop("checked") == isChecked || isAll) {
-          results.push({
-            id: parseInt($(item).data("id"), 10)
-            , label: $(item).find("label").text()
-            , isChecked: $(item).find("input[type=checkbox]").prop("checked")
-          })
-        }
-      }, this))
+      for (var i = 0 ; i < this.elements.length ; i++) {
+        if (isChecked === this.elements[i].isChecked || isAll)
+          results.push(this.elements[i])
+      }
       return results
     },
 
@@ -179,7 +181,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
     _resetSearch: function() {
       this.$parent.find(".search").val("")
-      this.reset(this.elements)
+      this._reset(this.elements)
     },
 
     _appendOne: function(item) {
@@ -201,6 +203,22 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       $label.attr("for", uuid)
     },
 
+    _append: function(elements) {
+      if (!$.isArray(elements)) {
+        this._appendOne(elements)
+      }
+      else {
+        elements = this._sort(elements, this.sortOptions)
+        for (var i = 0 ; i < elements.length ; i++) { this._appendOne(elements[i]) }
+      }
+    },
+
+    _reset: function(elements) {
+      this._isValidArray(elements)
+      this.$list.empty()
+      this._append(elements)
+      this._refreshCheckboxAll()
+    },
 
     // ----------------------------------
     // Event methods
@@ -210,7 +228,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
           , word = $(event.target).val()
 
       if (word.length < 1 && keyCode === 8) {
-        return this.reset(this.elements)
+        return this._reset(this.elements)
       }
       
       if (keyCode === 27) {
@@ -219,7 +237,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
       if (this.autosearch || keyCode === 13) {
         var results = this._findMatch(word, this.elements)
-        if (results.length > 0) return this.reset(results)
+        if (results.length > 0) return this._reset(results)
         return this.$list.html(templateNoResult)
       }
     },
@@ -266,12 +284,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
     append: function(elements) {
       if (!$.isArray(elements)) {
-        this._appendOne(elements)
+        this.elements.push(elements)
+      } else {
+        for (var i = 0 ; i < elements.length ; i ++)
+          this.elements.push(elements[i])
       }
-      else {
-        elements = this._sort(elements, this.sortOptions)
-        for (var i = 0 ; i < elements.length ; i++) { this._appendOne(elements[i]) }
-      }
+
+      this._append(elements)
 
       // Notify changes
       this.hasChanges = true
@@ -280,17 +299,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     remove: function(ids) {
       this._isValidArray(ids)
       this._removeElements(ids)
-      this.reset(this.elements)
+      this._reset(this.elements)
 
       // Notify changes
       this.hasChanges = true
     },
 
     reset: function(elements) {
-      this._isValidArray(elements)
-      this.$list.empty()
-      this.append(elements)
-      this._refreshCheckboxAll()
+      if (!$.isArray(elements)) {
+        this.elements = [elements]
+      } else {
+        this.elements = elements
+      }
+
+      this._reset(elements)
 
       // Notify changes
       this.hasChanges = true
@@ -310,8 +332,5 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   }
 
   $.fn.dropdownCheckbox.Constructor = DropdownCheckbox
-
-  $(document)
-    .on('click.dropdown-checkbox.data-api', '.dropdown-checkbox-content', function (e) { e.stopPropagation() })
 
 }(window.jQuery);

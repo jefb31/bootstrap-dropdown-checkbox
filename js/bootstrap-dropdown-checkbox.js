@@ -68,11 +68,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       // Close dropdown-checkbox
       this.$parent.addClass("x12x")
       $(".dropdown-checkbox.x12x").siblings().removeClass("open")
-      this.$parent.removeClass("x12x")
 
       // Close bootstrap dropdown
-      $(".dropdown").removeClass("open")
+      $(".dropdown.x12x").siblings().removeClass("open")
 
+      this.$parent.removeClass("x12x")
       this.$parent.toggleClass("open")
       return false
     }, this))

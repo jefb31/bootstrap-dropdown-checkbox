@@ -33,7 +33,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   var DropdownCheckbox = function(element, options) {
     // Create dropdown-checkbox
     $(element).html(template)
-    $(element).addClass("dropdown-checkbox")
+    $(element).addClass("dropdown-checkbox dropdown")
 
     this.$element = $(element).find(".dropdown-checkbox-toggle")
     this.$parent = $(element)
@@ -63,7 +63,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
     // Open panel when the link is clicked
     this.$element.on("click.dropdown-checkbox.data-api", $.proxy(function() {
-      this.$parent.siblings().removeClass("open")
+      // Close dropdown-checkbox
+      this.$parent.addClass("x12x")
+      $(".dropdown-checkbox.x12x").siblings().removeClass("open")
+      this.$parent.removeClass("x12x")
+
+      // Close bootstrap dropdown
+      $(".dropdown").removeClass("open")
+
       this.$parent.toggleClass("open")
       return false
     }, this))

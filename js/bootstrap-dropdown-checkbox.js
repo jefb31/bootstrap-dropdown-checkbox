@@ -152,7 +152,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     },
 
     _isValidArray: function(arr) {
-      if (!$.isArray(arr)) throw "[DropdownCheckbox] Requiert an array."
+      if (!$.isArray(arr)) throw "[DropdownCheckbox] Requires array."
     },
 
     _findMatch: function(word, elements) {

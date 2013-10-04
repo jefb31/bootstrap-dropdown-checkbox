@@ -17,7 +17,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   // Templates
   // **********************************
   var template = '\
-    <button class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Dropdown trigger<span class="dropdown-checkbox-nbselected"></span></button>\
+    <button class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Dropdown trigger </button>\
     <div class="dropdown-checkbox-content">\
       <div class="dropdown-checkbox-header">\
         <input class="checkbox-all" type="checkbox"><input type="text" placeholder="Search" class="search"/>\
@@ -26,6 +26,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     </div>'
   var templateOption = '<li><div class="layout"><input type="checkbox"/><label></label></div></li>'
   var templateNoResult = '<li><div class="layout"><label>No results.</label></div></li>'
+  var templateNbSelected = ' <span class="dropdown-checkbox-nbselected"></span>'
 
   // **********************************
   // Constructor
@@ -42,6 +43,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     this.hasChanges = false
 
     this.showNbSelected = false;
+
     // Set options if exist
     if (typeof options === "object") {
       this.$element.text(options.title)
@@ -54,6 +56,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       this.templateButton = options.templateButton
       this.showNbSelected = options.showNbSelected || false;
     }
+
+    this.$element.append(templateNbSelected)
+
 
     if (this.templateButton) {
       this.$element.remove();

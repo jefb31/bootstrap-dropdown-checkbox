@@ -17,7 +17,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   // Templates
   // **********************************
   var template = '\
-    <button class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Dropdown trigger</button>\
+    <button class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Dropdown trigger<span class="dropdown-checkbox-nbselected"></span></button>\
     <div class="dropdown-checkbox-content">\
       <div class="dropdown-checkbox-header">\
         <input class="checkbox-all" type="checkbox"><input type="text" placeholder="Search" class="search"/>\
@@ -41,6 +41,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     this.elements = []
     this.hasChanges = false
 
+    this.showNbSelected = false;
     // Set options if exist
     if (typeof options === "object") {
       this.$element.text(options.title)
@@ -51,6 +52,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       this.sortOptions = options.sortOptions
       this.hideHeader = options.hideHeader || options.hideHeader === undefined ? true : false
       this.templateButton = options.templateButton
+      this.showNbSelected = options.showNbSelected || false;
     }
 
     if (this.templateButton) {
@@ -92,6 +94,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     // Check or uncheck all checkbox
     this.$parent.find(".checkbox-all").on("change.dropdown-checkbox.data-api", $.proxy(function(event) {
       this.onClickCheckboxAll(event)
+      this._showNbSelected()
     }, this))
 
     // Events on document
@@ -107,9 +110,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     }, this))
 
     this.$parent.find(".dropdown-checkbox-header").on('keyup.dropdown-checkbox.data-api', $.proxy(DropdownCheckbox.prototype.onKeyup, this))
-    this.$parent.find("ul").delegate("li input[type=checkbox]", "click.dropdown-checkbox.data-api", $.proxy(this.onClickCheckbox, this))
+    this.$parent.find("ul").delegate("li input[type=checkbox]", "click.dropdown-checkbox.data-api", $.proxy(function(event) {
+      this.onClickCheckbox(event)
+      this._showNbSelected()
+    }, this))
 
+
+    
     this._reset(this.elements)
+    this._showNbSelected()
   }
 
   // **********************************
@@ -201,6 +210,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       var $label = $last.find("label")
       $label.text(label)
       $label.attr("for", uuid)
+      this._showNbSelected()
     },
 
     _append: function(elements) {
@@ -220,6 +230,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       this._refreshCheckboxAll()
     },
 
+    _showNbSelected: function() {
+      if(this.showNbSelected) {
+        this.$element.find(".dropdown-checkbox-nbselected").html("("+this._getCheckbox(true, false).length+")")
+      }
+    },
     // ----------------------------------
     // Event methods
     // ----------------------------------

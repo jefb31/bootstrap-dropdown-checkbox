@@ -48,7 +48,8 @@
     autosearch: true, 
     title: "My Dropdown Checkbox",
     hideHeader: false,
-    templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Accounts<b class="caret"></b></button>'
+    showNbSelected: true,
+    templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Accounts <span class="dropdown-checkbox-nbselected"></span><b class="caret"></b></button>'
   });
 
   $('.myDropdownCheckboxBasic').dropdownCheckbox("append", { id: "15", label: "added by itself", isChecked: true });

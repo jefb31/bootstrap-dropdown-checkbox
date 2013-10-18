@@ -148,22 +148,21 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     _query: function(type, url, success, error) {
       return $.ajax({
         type: type,
-        url: url + "?q=" + this.word,
+        url: url,
         dataType: "json",
         cache: false,
         contentType: "application/json",
         success: $.proxy(success, this)
-      })
+      });
     },
 
     _querySuccess: function(data) {
-      var results = this._queryParse(data)
-      if (results.length > 0) return this._reset(results)
-      return this.$list.html(templateNoResult)
+      this._queryParse(data);
+      this.console.log("query parsed...");
     },
 
     _queryParse: function(data) {
-      return data
+      return data;
     },
 
     // ----------------------------------
@@ -272,7 +271,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     // ----------------------------------
     onKeyup: function(event) {
       var keyCode = event.keyCode
-        , word = this.word = $(event.target).val()
+          , word = $(event.target).val()
 
       if (word.length < 1 && keyCode === 8) {
         return this._reset(this.elements)
@@ -284,7 +283,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
       if (this.autosearch || keyCode === 13) {
         if (this._queryUrl) {
-          this._query(this._queryMethod, this._queryUrl, this._querySuccess, this._queryError)
+          this._query(this._queryMethod, this._queryUrl, this._querySuccess, this._queryError);
+          console.log("query done...");
         } else {
           var results = this._findMatch(word, this.elements)
           if (results.length > 0) return this._reset(results)

@@ -81,7 +81,7 @@
         <p>The HTML template you should use:<p>
         <pre class="prettyprint">&#60div class="myDropdownCheckbox"&#62&#60/div&#62</pre>
         <p>Then, through a jQuery selector:<p>
-        <pre class="prettyprint">var myData = [{id: 1, label: "Test" }];<br/>$(".myDropdownCheckbox").dropdownCheckbox({ 
+        <pre class="prettyprint">var myData = [{id: 1, label: "Test" }];<br/>$(".myDropdownCheckbox").dropdownCheckbox({
   data: myData,
   title: "Dropdown Checkbox"
 });</pre>
@@ -158,7 +158,7 @@
               <td>string</td>
               <td>Undefined</td>
               <td>No</td>
-              <td>Customise your button. You need to have these attributes on your element: 
+              <td>Customise your button. You need to have these attributes on your element:
                   <div>- class: "dropdown-checkbox-toggle"<br/>
                   - data-toggle: "dropdown-checkbox"</div>
               </td>
@@ -238,14 +238,15 @@
       { id: "13", label: "NO WAY!", isChecked: false },
       { id: "14", label: "2 times?", isChecked: true }
     ];
-    $('.myDropdownCheckbox').dropdownCheckbox({ 
-      data: tab, 
-      autosearch: true, 
-      title: "Dropdown Checkbox", 
+    $('.myDropdownCheckbox').dropdownCheckbox({
+      queryUrl: "/json/exemple_1.json",
+      data: tab,
+      autosearch: true,
+      title: "Dropdown Checkbox",
       btnClass: "btn btn-primary",
       hideHeader: false
     });
-    $('.myDropdownCheckboxBasic').dropdownCheckbox({ 
+    $('.myDropdownCheckboxBasic').dropdownCheckbox({
       data: tab,
       templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown-checkbox" href="#">Accounts<b class="caret"></b></button>' });
   </script>

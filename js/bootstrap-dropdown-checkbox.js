@@ -55,6 +55,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       this.hideHeader = options.hideHeader || options.hideHeader === undefined ? true : false
       this.templateButton = options.templateButton
       this.showNbSelected = options.showNbSelected || false;
+
+      this._query = options.query || this._query;
+      this._queryMethod = options.httpMethod || "GET";
+      this._queryParse = options.queryParse || this._queryParse;
+      this._queryError = options.queryError || function() {};
+      this._queryUrl = options.queryUrl;
     }
 
     this.$element.append(templateNbSelected)
@@ -106,8 +112,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     // - Close panel when click out
     // - Catch keyup events in search box
     // - Catch click on checkbox
-    $(document).on('click.dropdown-checkbox.data-api', $.proxy(function () { 
-      this.$parent.removeClass('open') 
+    $(document).on('click.dropdown-checkbox.data-api', $.proxy(function () {
+      this.$parent.removeClass('open')
 
       // Notify changes on close
       if (this.hasChanges) this.$parent.trigger("change:dropdown-checkbox");
@@ -121,7 +127,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     }, this))
 
 
-    
+
     this._reset(this.elements)
     this._showNbSelected()
   }
@@ -137,6 +143,26 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     // ----------------------------------
     _sort: function(elements) {
       return elements
+    },
+
+    _query: function(type, url, success, error) {
+      return $.ajax({
+        type: type,
+        url: url,
+        dataType: "json",
+        cache: false,
+        contentType: "application/json",
+        success: success
+      });
+    },
+
+    _querySuccess: function(data) {
+      this._queryParse(data);
+      this.console.log("query parsed...");
+    },
+
+    _queryParse: function(data) {
+      return data;
     },
 
     // ----------------------------------
@@ -179,7 +205,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
     _setCheckbox: function(isChecked, id) {
       for(var i = 0 ; i < this.elements.length ; i++) {
-        if (id == this.elements[i].id) { 
+        if (id == this.elements[i].id) {
           this.elements[i].isChecked = isChecked
           break
         }
@@ -250,15 +276,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       if (word.length < 1 && keyCode === 8) {
         return this._reset(this.elements)
       }
-      
+
       if (keyCode === 27) {
         return this._resetSearch()
       }
 
       if (this.autosearch || keyCode === 13) {
-        var results = this._findMatch(word, this.elements)
-        if (results.length > 0) return this._reset(results)
-        return this.$list.html(templateNoResult)
+        if (this._queryUrl) {
+          this._query(this._queryMethod, this._queryUrl, this._querySuccess, this._queryError);
+          console.log("query done...");
+        } else {
+          var results = this._findMatch(word, this.elements)
+          if (results.length > 0) return this._reset(results)
+          return this.$list.html(templateNoResult)
+        }
       }
     },
 

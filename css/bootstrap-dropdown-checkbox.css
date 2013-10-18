@@ -22,7 +22,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   clear: both;
 }
 .hide-text {
-  font: 0/0 a;
+  font: NaN a;
   color: transparent;
   text-shadow: none;
   background-color: transparent;

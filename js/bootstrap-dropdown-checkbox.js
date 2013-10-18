@@ -152,7 +152,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         dataType: "json",
         cache: false,
         contentType: "application/json",
-        success: $.proxy(success, this)
+        success: success
       });
     },
 

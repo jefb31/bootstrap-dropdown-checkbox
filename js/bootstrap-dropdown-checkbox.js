@@ -1,14 +1,14 @@
 /*
 
-Copyright (C) 2013 Acquisio Inc. V0.1.1
+ Copyright (C) 2013 Acquisio Inc. V0.1.1
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-*/
+ */
 !function($) {
 
   "use strict";
@@ -55,6 +55,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       this.hideHeader = options.hideHeader || options.hideHeader === undefined ? true : false
       this.templateButton = options.templateButton
       this.showNbSelected = options.showNbSelected || false;
+
+      this._query = options.query || this._query;
+      this._queryMethod = options.httpMethod || "GET";
+      this._queryParse = options.queryParse || this._queryParse;
+      this._queryError = options.queryError || function() {};
+      this._queryUrl = options.queryUrl;
     }
 
     this.$element.append(templateNbSelected)
@@ -106,8 +112,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     // - Close panel when click out
     // - Catch keyup events in search box
     // - Catch click on checkbox
-    $(document).on('click.dropdown-checkbox.data-api', $.proxy(function () { 
-      this.$parent.removeClass('open') 
+    $(document).on('click.dropdown-checkbox.data-api', $.proxy(function () {
+      this.$parent.removeClass('open')
 
       // Notify changes on close
       if (this.hasChanges) this.$parent.trigger("change:dropdown-checkbox");
@@ -121,7 +127,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     }, this))
 
 
-    
+
     this._reset(this.elements)
     this._showNbSelected()
   }
@@ -139,13 +145,34 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       return elements
     },
 
+    _query: function(type, url, success, error) {
+      return $.ajax({
+        type: type,
+        url: url + "?q=" + this.word,
+        dataType: "json",
+        cache: false,
+        contentType: "application/json",
+        success: $.proxy(success, this)
+      })
+    },
+
+    _querySuccess: function(data) {
+      var results = this._queryParse(data)
+      if (results.length > 0) return this._reset(results)
+      return this.$list.html(templateNoResult)
+    },
+
+    _queryParse: function(data) {
+      return data
+    },
+
     // ----------------------------------
     // Internal methods
     // ----------------------------------
     _removeElements: function(ids) {
       this._isValidArray(ids)
       var tmp = []
-          , toAdd = true
+        , toAdd = true
       for (var i = 0 ; i < this.elements.length ; i++) {
         for (var j = 0 ; j < ids.length ; j++) {
           if (ids[j] === parseInt(this.elements[i].id, 10)) toAdd = false
@@ -179,7 +206,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
     _setCheckbox: function(isChecked, id) {
       for(var i = 0 ; i < this.elements.length ; i++) {
-        if (id == this.elements[i].id) { 
+        if (id == this.elements[i].id) {
           this.elements[i].isChecked = isChecked
           break
         }
@@ -188,7 +215,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
     _refreshCheckboxAll: function() {
       var $elements = this.$element.parents(".dropdown-checkbox").find("ul li input[type=checkbox]")
-          , willChecked
+        , willChecked
       $elements.each(function() { willChecked = willChecked || $(this).prop("checked") })
       this.$element.parents(".dropdown-checkbox").find(".checkbox-all").prop("checked", willChecked)
     },
@@ -231,6 +258,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     _reset: function(elements) {
       this._isValidArray(elements)
       this.$list.empty()
+      elements = this._sort(elements)
       this._append(elements)
       this._refreshCheckboxAll()
     },
@@ -245,27 +273,31 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     // ----------------------------------
     onKeyup: function(event) {
       var keyCode = event.keyCode
-          , word = $(event.target).val()
+        , word = this.word = $(event.target).val()
 
       if (word.length < 1 && keyCode === 8) {
         return this._reset(this.elements)
       }
-      
+
       if (keyCode === 27) {
         return this._resetSearch()
       }
 
       if (this.autosearch || keyCode === 13) {
-        var results = this._findMatch(word, this.elements)
-        if (results.length > 0) return this._reset(results)
-        return this.$list.html(templateNoResult)
+        if (this._queryUrl) {
+          this._query(this._queryMethod, this._queryUrl, this._querySuccess, this._queryError)
+        } else {
+          var results = this._findMatch(word, this.elements)
+          if (results.length > 0) return this._reset(results)
+          return this.$list.html(templateNoResult)
+        }
       }
     },
 
     onClickCheckboxAll: function(event) {
       var isChecked = $(event.target).is(":checked")
-          , $elements = this.$parent.find("ul li")
-          , self = this
+        , $elements = this.$parent.find("ul li")
+        , self = this
       $elements.each(function() {
         $(this).find("input[type=checkbox]").prop("checked", isChecked)
         self._setCheckbox(isChecked, $(this).data("id"))
@@ -310,6 +342,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
           this.elements.push(elements[i])
       }
 
+      elements = this._sort(elements)
+
       this._append(elements)
 
       // Notify changes
@@ -344,8 +378,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   // **********************************
   $.fn.dropdownCheckbox = function (option, more) {
     var $this = $(this)
-        , data = $this.data('dropdownCheckbox')
-        , options = typeof option == 'object' && option
+      , data = $this.data('dropdownCheckbox')
+      , options = typeof option == 'object' && option
     if (!data) $this.data('dropdownCheckbox', (data = new DropdownCheckbox(this, options)))
     if (typeof option == 'string') return data[option](more)
     return this

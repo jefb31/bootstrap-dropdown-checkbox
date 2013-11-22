@@ -258,6 +258,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     _reset: function(elements) {
       this._isValidArray(elements)
       this.$list.empty()
+      elements = this._sort(elements)
       this._append(elements)
       this._refreshCheckboxAll()
     },
@@ -340,6 +341,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         for (var i = 0 ; i < elements.length ; i ++)
           this.elements.push(elements[i])
       }
+
+      elements = this._sort(elements)
 
       this._append(elements)
 

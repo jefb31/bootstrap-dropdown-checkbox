@@ -8,6 +8,8 @@
     "devel"    : true,
     "boss"     : true,
     "expr"     : true,
-    "asi"      : true,
-    "multistr" : true
+    "asi"      : false,
+    "multistr" : true,
+    "strict"   : false,
+    "globals": ["define", "module"]
 }

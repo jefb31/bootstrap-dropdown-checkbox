@@ -5,7 +5,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-  <title>Your Website</title>
+  <title>Bootstrap Dropdown Checkbox</title>
   <link rel="stylesheet" type="text/css" href="../dependencies/css/bootstrap.css" />
   <link rel="stylesheet" type="text/css" href="../css/bootstrap-dropdown-checkbox.css" />
   <link rel="stylesheet" type="text/css" href="css/main.css" />
@@ -13,15 +13,15 @@
 
 <body>
   <div class="navbar">
-          <div class="navbar-inner">
-            <a class="brand" href="#">Title</a>
-            <ul class="nav">
-              <li class="myDropdownCheckboxBasic dropdown-checkbox dropdown open"></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-            </ul>
-          </div>
-        </div>
+    <div class="navbar-inner">
+      <a class="brand" href="#">Bootstrap Dropdown Checkbox</a>
+      <ul class="nav">
+        <li class="myDropdownCheckboxBasic dropdown-checkbox dropdown open"></li>
+        <li><a href="#">Link</a></li>
+        <li><a href="#">Link</a></li>
+      </ul>
+    </div>
+  </div>
 </body>
 
 <script src="../dependencies/js/jquery.min.js"></script>
@@ -43,16 +43,18 @@
     { id: "13", label: "NO WAY!", isChecked: false },
     { id: "14", label: "2 times?", isChecked: true }
   ];
-  $('.myDropdownCheckboxBasic').dropdownCheckbox({ 
-    data: tab, 
-    autosearch: true, 
+
+  $('.myDropdownCheckboxBasic').dropdownCheckbox({
+    data: tab,
+    autosearch: true,
     title: "My Dropdown Checkbox",
     hideHeader: false,
     showNbSelected: true,
     templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Accounts <span class="dropdown-checkbox-nbselected"></span><b class="caret"></b></button>'
   });
 
-  $('.myDropdownCheckboxBasic').dropdownCheckbox("append", { id: "15", label: "added by itself", isChecked: true });
+  $('.myDropdownCheckboxBasic').dropdownCheckbox("append",
+    { id: "15", label: "added by itself", isChecked: true });
 
 
 </script>

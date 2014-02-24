@@ -11,5 +11,5 @@
     "asi"      : false,
     "multistr" : true,
     "strict"   : false,
-    "globals": ["define", "module"]
+    "globals": ["define", "module", "test", "$", "ok", "equal", "deepEqual", "expect"]
 }

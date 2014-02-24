@@ -1,14 +1,25 @@
 /*
+Copyright (C) 2014 Acquisio Inc. V0.1.1
 
- Copyright (C) 2013 Acquisio Inc. V0.1.1
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
- Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
- The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 
- THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
- */
 (function(root, factory) {
   // CommonJS support
   if (typeof exports === 'object') {
@@ -24,6 +35,15 @@
   }
 }(this, function($) {
   'use strict';
+
+  var defer = function defer(fn) {
+    if (window.requestAnimationFrame) {
+      window.requestAnimationFrame(fn);
+    }
+    else {
+      setTimeout(fn, 0);
+    }
+  };
 
   // **********************************
   // Templates
@@ -78,7 +98,6 @@
 
     this.$element.append(templateNbSelected);
 
-
     if (this.templateButton) {
       this.$element.remove();
       this.$parent.prepend(this.templateButton);
@@ -112,8 +131,8 @@
 
       // Notify changes on close
       if (this.hasChanges) this.$parent.trigger('change:dropdown-checkbox');
-      this.hasChanges = false;
 
+      this.hasChanges = false;
       return false;
     }, this));
 
@@ -241,48 +260,64 @@
       this._reset(this.elements);
     },
 
-    _appendOne: function(item) {
+    _createListItem: function(item) {
       var id = item.id,
-        label = item.label,
-        isChecked = item.isChecked,
-        uuid = new Date().getTime() * Math.random();
+          label = item.label,
+          isChecked = item.isChecked,
+          uuid = new Date().getTime() * Math.random();
 
-      this.$list.append(templateOption);
-      var $last = this.$list.find('li').last();
-      $last.data('id', id);
+      var node = this.listItemPrototype.cloneNode(true);
+      var container = node.firstChild;
 
-      var $checkbox = $last.find('input');
-      $checkbox.attr('id', uuid);
-      if (isChecked) $checkbox.attr('checked', 'checked');
+      $(node).data('id', id);
+      container.firstChild.id = uuid;
+      container.firstChild.checked = isChecked;
+      container.lastChild.textContent = label;
+      container.lastChild.setAttribute('for', uuid);
+      return node;
+    },
 
-      var $label = $last.find('label');
-      $label.text(label);
-      $label.attr('for', uuid);
-      this._showNbSelected();
+    _appendOne: function(item) {
+      this.$list.append(this._createListItem(item));
     },
 
     _append: function(elements) {
-      if (!$.isArray(elements)) {
-        this._appendOne(elements);
-      } else {
-        elements = this._sort(elements, this.sortOptions);
-        for (var i = 0; i < elements.length; i++) {
-          this._appendOne(elements[i]);
+      // Create a list element we can clone
+      if (!this.listItemPrototype) this.listItemPrototype = $(templateOption)[0];
+
+      if (!$.isArray(elements)) elements = [elements];
+
+      var len = elements.length;
+      var batchsize = 100;
+      var createListItem = this._createListItem.bind(this);
+      var $list = this.$list;
+      var i;
+
+      elements = this._sort(elements, this.sortOptions);
+
+      (function appendBatch(index) {
+        var fragment = document.createDocumentFragment();
+        for (i = index; i < Math.min(index + batchsize, len); i++) {
+          fragment.appendChild(createListItem(elements[i]));
         }
-      }
+        $list[0].appendChild(fragment);
+        if (i < len) defer(appendBatch.bind(null, i));
+      })(0);
+
+      this._showNbSelected();
     },
 
     _reset: function(elements) {
       this._isValidArray(elements);
       this.$list.empty();
-      elements = this._sort(elements);
-      this._append(elements);
+      this._append(this._sort(elements));
       this._refreshCheckboxAll();
     },
 
     _showNbSelected: function() {
       if (this.showNbSelected) {
-        this.$element.find('.dropdown-checkbox-nbselected').html('(' + this._getCheckbox(true, false).length + ')');
+        this.$element.find('.dropdown-checkbox-nbselected')
+          .html('(' + this._getCheckbox(true, false).length + ')');
       }
     },
     // ----------------------------------
@@ -302,7 +337,10 @@
 
       if (this.autosearch || keyCode === 13) {
         if (this._queryUrl) {
-          this._query(this._queryMethod, this._queryUrl, this._querySuccess, this._queryError);
+          this._query(this._queryMethod,
+                      this._queryUrl,
+                      this._querySuccess,
+                      this._queryError);
         } else {
           var results = this._findMatch(word, this.elements);
           if (results.length  > 0) return this._reset(results);
@@ -327,7 +365,8 @@
     },
 
     onClickCheckbox: function(event) {
-      this._setCheckbox($(event.target).prop('checked'), $(event.target).parent().parent().data('id'));
+      this._setCheckbox($(event.target).prop('checked'),
+                        $(event.target).parent().parent().data('id'));
       this._refreshCheckboxAll();
       this.$parent.trigger('checked', $(event.target).prop('checked'));
       $(event.target).prop('checked') ? this.$parent.trigger('check:checkbox') : this.$parent.trigger('uncheck:checkbox');
@@ -368,6 +407,7 @@
     },
 
     remove: function(ids) {
+      if (!$.isArray(ids)) ids = [ids];
       this._isValidArray(ids);
       this._removeElements(ids);
       this._reset(this.elements);

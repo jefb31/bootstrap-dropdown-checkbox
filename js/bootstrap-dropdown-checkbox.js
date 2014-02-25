@@ -318,7 +318,7 @@ SOFTWARE.
           defer(appendBatch.bind(null, i));
         }
         else {
-          if (remainder > 0) {
+          if (remainder > 0 && maxItems) {
             $container.append(wrapMaxItems(templateMaxResults, maxItems, elements.length));
           }
         }

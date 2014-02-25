@@ -45,6 +45,12 @@ SOFTWARE.
     }
   };
 
+  var wrapMaxItems = function wrapMaxItems(content, limit, total) {
+    return ('<div class="alert maxitems">' + content + '</div>')
+      .replace('{limit}', limit)
+      .replace('{total}', total);
+  };
+
   // **********************************
   // Templates
   // **********************************
@@ -60,6 +66,7 @@ SOFTWARE.
   var templateOption = '<li><div class="layout"><input type="checkbox"/><label></label></div></li>';
   var templateNoResult = '<li><div class="layout"><label>No results.</label></div></li>';
   var templateNbSelected = ' <span class="dropdown-checkbox-nbselected"></span>';
+  var templateMaxResults = 'Showing {limit} of {total} items. Use search.';
 
   // **********************************
   // Constructor
@@ -72,9 +79,9 @@ SOFTWARE.
     this.$element = $(element).find('.dropdown-checkbox-toggle');
     this.$parent = $(element);
     this.$list = this.$parent.find('ul');
+
     this.elements = [];
     this.hasChanges = false;
-
     this.showNbSelected = false;
 
     // Set options if exist
@@ -88,15 +95,16 @@ SOFTWARE.
       this.hideHeader = options.hideHeader || options.hideHeader === undefined ? true : false;
       this.templateButton = options.templateButton;
       this.showNbSelected = options.showNbSelected || false;
-
+      this.maxItems = options.maxItems || false;
       this._query = options.query || this._query;
       this._queryMethod = options.httpMethod || 'GET';
-      this._queryParse = options.queryParse ||  this._queryParse;
-      this._queryError = options.queryError ||   function() {};
+      this._queryParse = options.queryParse || this._queryParse;
+      this._queryError = options.queryError || function() {};
       this._queryUrl = options.queryUrl;
+      this.templateMaxResults = options.templateMaxResults || templateMaxResults;
     }
 
-    this.$element.append(templateNbSelected);
+    if (this.showNbSelected) this.$element.append(templateNbSelected);
 
     if (this.templateButton) {
       this.$element.remove();
@@ -287,11 +295,15 @@ SOFTWARE.
 
       if (!$.isArray(elements)) elements = [elements];
 
-      var len = elements.length;
+      var len = this.maxItems ? Math.min(this.maxItems, elements.length) : elements.length;
+      var remainder = elements.length - this.maxItems;
+      var maxItems = this.maxItems;
       var batchsize = 100;
+      var templateMaxResults = this.templateMaxResults;
       var createListItem = this._createListItem.bind(this);
       var $list = this.$list;
       var i;
+      var $container = this.$parent.find('.dropdown-checkbox-content');
 
       elements = this._sort(elements, this.sortOptions);
 
@@ -301,7 +313,14 @@ SOFTWARE.
           fragment.appendChild(createListItem(elements[i]));
         }
         $list[0].appendChild(fragment);
-        if (i < len) defer(appendBatch.bind(null, i));
+        if (i < len) {
+          defer(appendBatch.bind(null, i));
+        }
+        else {
+          if (remainder > 0) {
+            $container.append(wrapMaxItems(templateMaxResults, maxItems, elements.length));
+          }
+        }
       })(0);
 
       this._showNbSelected();
@@ -309,6 +328,7 @@ SOFTWARE.
 
     _reset: function(elements) {
       this._isValidArray(elements);
+      this.$parent.find('.maxitems').remove();
       this.$list.empty();
       this._append(this._sort(elements));
       this._refreshCheckboxAll();

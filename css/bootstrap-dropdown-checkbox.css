@@ -105,6 +105,10 @@ SOFTWARE.
   margin-bottom: 0px;
   height: 25px;
 }
+.dropdown-checkbox .dropdown-checkbox-content .maxitems {
+  font-size: 80%;
+  margin: 0;
+}
 .dropdown-checkbox.open .dropdown-checkbox-content {
   display: block;
 }

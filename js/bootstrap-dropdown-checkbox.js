@@ -66,7 +66,7 @@ SOFTWARE.
   var templateOption = '<li><div class="layout"><input type="checkbox"/><label></label></div></li>';
   var templateNoResult = '<li><div class="layout"><label>No results.</label></div></li>';
   var templateNbSelected = ' <span class="dropdown-checkbox-nbselected"></span>';
-  var templateMaxResults = 'Showing {limit} of {total} items. Use search.';
+  var templateMaxResults = 'Showing {limit} of {total} items<br>Use search to filter your results.';
 
   // **********************************
   // Constructor
@@ -83,6 +83,7 @@ SOFTWARE.
     this.elements = [];
     this.hasChanges = false;
     this.showNbSelected = false;
+    this.maxItems = false;
 
     // Set options if exist
     if (typeof options === 'object') {

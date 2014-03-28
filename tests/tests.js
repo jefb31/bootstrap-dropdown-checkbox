@@ -37,7 +37,7 @@ test('widget will not create itself twice if initialized on the same element and
   $('#qunit-fixture > div').dropdownCheckbox({ data: [] });
   var newWidget = $('#qunit-fixture > div').data('dropdownCheckbox');
   equal(widget, newWidget, 'No new widget was created');
-  equal(widget.elements.length, 1, 'New widget configuration was not applied');
+  equal(widget.data.length, 1, 'New widget configuration was not applied');
 });
 
 
@@ -61,7 +61,7 @@ test('#checked returns the list of checked data items', function() {
 
   equal(widget.checked().length, 5, 'Items is the right length');
   for (i = 0; i < 5; i++) {
-    deepEqual(widget.elements[i], items[i], 'The right items are checked');
+    deepEqual(widget.data[i], items[i], 'The right items are checked');
   }
 });
 
@@ -76,7 +76,7 @@ test('#unchecked returns the list of unchecked data items', function() {
 
   equal(widget.unchecked().length, 5, 'Unchecked returns the right number of items');
   for (i = 0; i < 5; i++) {
-    deepEqual(widget.elements[i], items[i], 'The right items are unchecked');
+    deepEqual(widget.data[i], items[i], 'The right items are unchecked');
   }
 });
 
@@ -84,7 +84,7 @@ test('#append appends a single new data item and renders the corresponding eleme
   var widget = setup();
 
   widget.append({ id: 1, label: 'single item', isChecked: true });
-  equal(widget.elements.length, 1, 'Single item');
+  equal(widget.data.length, 1, 'Single item');
   equal(widget.$list.find('li').length, 1, 'One item found in the list');
 });
 
@@ -93,7 +93,7 @@ test('#append appends n data items from an array and renders the corresponding e
   var data = list(25);
 
   widget.append(data);
-  equal(widget.elements.length, 25, '25 data items found');
+  equal(widget.data.length, 25, '25 data items found');
   equal(widget.$list.find('li').length, 25, '25 items found in the list');
 });
 
@@ -103,9 +103,9 @@ test('#remove removes one data item and its corresponding elements', function() 
   var widget = setup({ data: data });
 
   widget.remove(removedItem.id);
-  equal(widget.elements.length, 4, '4 data items found');
+  equal(widget.data.length, 4, '4 data items found');
   equal(widget.$list.find('li').length, 4, '4 items found in the list');
-  equal(widget.elements.indexOf(removedItem), -1, 'item has been removed from the list');
+  equal(widget.data.indexOf(removedItem), -1, 'item has been removed from the list');
 });
 
 test('#remove removes multiple data items and corresponding elements', function() {
@@ -114,10 +114,10 @@ test('#remove removes multiple data items and corresponding elements', function(
   var widget = setup({ data: data });
 
   widget.remove([removedItems[0].id, removedItems[1].id]);
-  equal(widget.elements.length, 3, '3 data items found');
+  equal(widget.data.length, 3, '3 data items found');
   equal(widget.$list.find('li').length, 3, '3 items found in the list');
-  equal(widget.elements.indexOf(removedItems[0]), -1, 'First item has been removed from the list');
-  equal(widget.elements.indexOf(removedItems[1]), -1, 'Second item has been removed from the list');
+  equal(widget.data.indexOf(removedItems[0]), -1, 'First item has been removed from the list');
+  equal(widget.data.indexOf(removedItems[1]), -1, 'Second item has been removed from the list');
 });
 
 test('#reset resets the dropdown with a new list of items', function() {
@@ -125,12 +125,12 @@ test('#reset resets the dropdown with a new list of items', function() {
   var resetData = list(5);
   var widget = setup({ data: initialData });
 
-  equal(widget.elements.length, 10, '10 data items found after initial setup');
+  equal(widget.data.length, 10, '10 data items found after initial setup');
   equal(widget.$list.find('li').length, 10, '10 items found in the list');
 
   widget.reset(resetData);
 
-  equal(widget.elements.length, 5, '5 data items found after initial setup');
+  equal(widget.data.length, 5, '5 data items found after initial setup');
   equal(widget.$list.find('li').length, 5, '5 items found in the list');
 });
 
@@ -265,3 +265,88 @@ test('uncheck:checkbox and "checked" is triggered when a single checkbox is unch
   widget.$element.click();
   widget.$list.find('li input[type=checkbox]').last().click();
 });
+
+module('Alternate AKA stupid mode');
+test('when initializing with all checked items, the checkall checkbox is checked, all models are checked, but none of the checkboxes are', function(){
+  expect(3);
+
+  var initialData = list(10, true);
+  var widget = setup({ data: initialData, alternate: true });
+
+  equal(widget.$parent.find('.checkbox-all:checked').length, 1, 'All checked checkbox is checked');
+  equal(widget.$list.find('input[type=checkbox]:checked').length, 0, 'No checkboxes found checked');
+  equal(widget._allChecked(), true, 'All data is checked data');
+});
+
+test('when initializing with all checked items, the checkall checkbox is checked, all models are checked, but none of the checkboxes are', function(){
+  expect(3);
+
+  var initialData = list(10, true);
+  var widget = setup({ data: initialData, alternate: true });
+
+  equal(widget.$parent.find('.checkbox-all:checked').length, 1, 'All checked checkbox is checked');
+  equal(widget.$list.find('input[type=checkbox]:checked').length, 0, 'No checkboxes found checked');
+  equal(widget._allChecked(), true, 'All data is checked');
+});
+
+test('when initializing with all checked items, if i select one checkbox, one model is checked, the all checked is not checked', function(){
+  expect(5);
+
+  var initialData = list(10, true);
+  var widget = setup({ data: initialData, alternate: true });
+
+  equal(widget.$list.find('input[type=checkbox]:checked').length, 0, 'No checkboxes found checked');
+
+  widget.$list.find('input[type=checkbox]').first().click();
+
+  equal(widget.$parent.find('.checkbox-all:checked').length, 0, 'All checked checkbox is not checked');
+  equal(widget.$list.find('input[type=checkbox]:checked').length, 1, 'One checkboxes found checked');
+  equal(widget._checkedLength(), 1, '1 data item is checked');
+  deepEqual(widget.checked(), [initialData[0]], 'The right item is checked');
+});
+
+test('when initializing with all unchecked items, the checkall checkbox is checked, all models are checked and none of the checkboxes are checked', function(){
+  expect(3);
+
+  var initialData = list(10, false);
+  var widget = setup({ data: initialData, alternate: true });
+
+  equal(widget.$parent.find('.checkbox-all:checked').length, 1, 'All checked checkbox is checked');
+  equal(widget.$list.find('input[type=checkbox]:checked').length, 0, 'No checkboxes found checked');
+  equal(widget._allChecked(), true, 'All data is checked');
+});
+
+test('when initializing with mixed list of items, the checkall checkbox is unchecked, some models are checked and some of the checkboxes are checked', function(){
+  expect(3);
+
+  var initialData = list(10, false);
+  initialData[0].isChecked = true;
+  initialData[3].isChecked = true;
+  initialData[7].isChecked = true;
+
+  var widget = setup({ data: initialData, alternate: true });
+
+  equal(widget.$parent.find('.checkbox-all:checked').length, 0, 'Checkall checkbox is not checked');
+  equal(widget.$list.find('input[type=checkbox]:checked').length, 3, '3 checkboxes found checked');
+  deepEqual(widget.checked(), [initialData[0], initialData[3], initialData[7]], 'The right data items are checked');
+});
+
+test('when initializing with mixed list of items, the checkall checkbox is unchecked, some models are checked and some of the checkboxes are checked', function(){
+  expect(3);
+
+  var initialData = list(10, false);
+  initialData[0].isChecked = true;
+  initialData[3].isChecked = true;
+  initialData[7].isChecked = true;
+
+  var widget = setup({ data: initialData, alternate: true });
+
+  equal(widget.$parent.find('.checkbox-all:checked').length, 0, 'Checkall checkbox is not checked');
+  equal(widget.$list.find('input[type=checkbox]:checked').length, 3, '3 checkboxes found checked');
+  deepEqual(widget.checked(), [initialData[0], initialData[3], initialData[7]], 'The right data items are checked');
+});
+
+
+
+
+

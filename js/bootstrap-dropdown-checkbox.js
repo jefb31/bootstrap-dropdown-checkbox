@@ -569,6 +569,11 @@ SOFTWARE.
 
       // In alternate mode, select the first one if you've created yourself a nice empty list.
       if (alternate && modelState === false) {
+        // Reset all the data to unchecked
+        this.data.forEach(function(item){
+          item.isChecked = false;
+        });
+        // Select the first one.
         $elements.first().each(function(){
           $(this).find('input[type=checkbox]').prop('checked', true);
           self._setCheckbox(true, $(this).data('id'));

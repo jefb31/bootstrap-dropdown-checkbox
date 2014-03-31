@@ -557,6 +557,13 @@ SOFTWARE.
         self._setCheckbox(modelState, $(this).data('id'));
       });
 
+      // Make sure we select all the items, not just the visible ones.
+      if (alternate && isChecked) {
+        this.data.forEach(function(item){
+          item.isChecked = true;
+        });
+      }
+
       this.$parent.trigger('checked:all', isChecked);
       isChecked ? this.$parent.trigger('check:all') : this.$parent.trigger('uncheck:all');
 

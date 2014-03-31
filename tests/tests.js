@@ -346,6 +346,24 @@ test('when initializing with mixed list of items, the checkall checkbox is unche
   deepEqual(widget.checked(), [initialData[0], initialData[3], initialData[7]], 'The right data items are checked');
 });
 
+test('whhen there is a maxitems set and the checkall checkbox is checked, all models are checked', function(){
+  expect(3);
+
+  var initialData = list(100, false);
+  initialData[0].isChecked = true;
+  initialData[3].isChecked = true;
+  initialData[7].isChecked = true;
+
+  var widget = setup({ data: initialData, alternate: true, maxItems: 10 });
+  widget.$parent.find('.checkbox-all').click();
+
+  equal(widget.$parent.find('.checkbox-all:checked').length, 1, 'Checkall checkbox is checked');
+  equal(widget.$list.find('input[type=checkbox]:checked').length, 0, 'No checkboxes found checked');
+  equal(widget.checked().length, 100, 'All the items are checked');
+});
+
+
+
 
 
 

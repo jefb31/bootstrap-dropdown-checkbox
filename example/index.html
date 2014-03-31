@@ -87,11 +87,12 @@
     { id: "15", label: "added by itself", isChecked: true });
 
   $('.alternate-behaviour').dropdownCheckbox({
-    data: list(500, false),
+    data: list(3000, false),
     autosearch: true,
     title: "Alternate behaviour",
     hideHeader: false,
     showNbSelected: true,
+    maxItems: 500,
     alternate: true,
     templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Alternate Behaviour <span class="dropdown-checkbox-nbselected"></span><b class="caret"></b>'
   });

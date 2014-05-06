@@ -1,6 +1,6 @@
 {
   "name": "bootstrap-dropdown-checkbox",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Bootstrap dropdown + multiple checkbox selection",
   "main": "js/bootstrap-dropdown-checkbox.js",
   "directories": {

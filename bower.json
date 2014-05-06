@@ -1,0 +1,18 @@
+{
+    "name": "bootstrap-dropdown-checkbox",
+    "description": "Bootstrap dropdown checkbox",
+    "version": "0.1.1",
+    "main": [
+        "css/bootstrap-dropdown-checkbox.css",
+        "js/bootstrap-dropdown-checkbox.js"
+    ],
+    "dependencies": {
+        "bootstrap": "2.3.2",
+        "jquery": ">=1.10.1"
+    },
+    "readme": "README.md",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/Acquisio/bootstrap-dropdown-checkbox"
+    }
+}

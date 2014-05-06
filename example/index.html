@@ -16,17 +16,36 @@
     <div class="navbar-inner">
       <a class="brand" href="#">Bootstrap Dropdown Checkbox</a>
       <ul class="nav">
-        <li class="myDropdownCheckboxBasic dropdown-checkbox dropdown open"></li>
+        <li class="dropdown-checkbox-example dropdown-checkbox dropdown open"></li>
         <li><a href="#">Link</a></li>
         <li><a href="#">Link</a></li>
+        <li class="alternate-behaviour dropdown-checkbox dropdown open"></li>
       </ul>
     </div>
   </div>
+  <p class="status" style="margin-top: 300px;">
+  </p>
 </body>
+
 
 <script src="../dependencies/js/jquery.min.js"></script>
 <script src="../js/bootstrap-dropdown-checkbox.js"></script>
 <script>
+  function list(size, checked) {
+    var result = [];
+    for (var i = 0; i < size; i++) {
+      result.push({
+        id: i,
+        label: 'Item #' + i,
+        isChecked: checked === undefined ? !!(Math.round(Math.random() * 1)) : checked
+      });
+    }
+    return result;
+  }
+
+
+  var widget, alt;
+
   var tab = [
     { id: "1", label: "Forever.", isChecked: true },
     { id: "2", label: "I love cheese.", isChecked: true },
@@ -44,18 +63,45 @@
     { id: "14", label: "2 times?", isChecked: true }
   ];
 
-  $('.myDropdownCheckboxBasic').dropdownCheckbox({
+  function p(wat) {
+    return '<p>' + JSON.stringify(wat) + '</p>';
+  }
+
+  function updateStatus() {
+    var $p = $('p.status').empty();
+
+    $p.append(p(widget.checked()));
+    $p.append(p(alt.checked()));
+  }
+
+  $('.dropdown-checkbox-example').dropdownCheckbox({
     data: tab,
     autosearch: true,
     title: "My Dropdown Checkbox",
     hideHeader: false,
     showNbSelected: true,
-    templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Accounts <span class="dropdown-checkbox-nbselected"></span><b class="caret"></b>'
+    templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Example Dropdown <span class="dropdown-checkbox-nbselected"></span><b class="caret"></b>'
   });
 
-  $('.myDropdownCheckboxBasic').dropdownCheckbox("append",
+  $('.dropdown-checkbox-example').dropdownCheckbox("append",
     { id: "15", label: "added by itself", isChecked: true });
 
+  $('.alternate-behaviour').dropdownCheckbox({
+    data: list(3000, false),
+    autosearch: true,
+    title: "Alternate behaviour",
+    hideHeader: false,
+    showNbSelected: true,
+    maxItems: 500,
+    alternate: true,
+    templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Alternate Behaviour <span class="dropdown-checkbox-nbselected"></span><b class="caret"></b>'
+  });
+
+  widget = $('.dropdown-checkbox-example').data('dropdownCheckbox');
+  alt = $('.alternate-behaviour').data('dropdownCheckbox');
+
+  $('body').on('change:dropdown-checkbox checked checked:all check:all uncheck:all check:checked uncheck:checked', updateStatus());
+  updateStatus()
 
 </script>
 </html>

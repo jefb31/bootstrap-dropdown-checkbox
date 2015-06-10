@@ -165,7 +165,7 @@ SOFTWARE.
     }, this));
 
     this.$parent.find('.dropdown-checkbox-header').on('keyup.dropdown-checkbox.data-api', $.proxy(DropdownCheckbox.prototype.onKeyup, this));
-    this.$parent.find('ul').delegate('li input[type=checkbox]', 'click.dropdown-checkbox.data-api', $.proxy(function(event) {
+    this.$parent.find('ul').delegate('li input[type=checkbox]', 'change.dropdown-checkbox.data-api', $.proxy(function(event) {
       this.onClickCheckbox(event);
       this._showNbSelected();
     }, this));

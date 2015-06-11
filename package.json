@@ -1,6 +1,6 @@
 {
   "name": "bootstrap-dropdown-checkbox",
-  "version": "0.1.3",
+  "version": "0.1.2",
   "description": "Bootstrap dropdown + multiple checkbox selection",
   "main": "js/bootstrap-dropdown-checkbox.js",
   "directories": {
@@ -18,7 +18,7 @@
     "dropdown",
     "checkbox"
   ],
-  "author": "Kevin Perard",
+  "author": "Acquisio Inc.",
   "license": "MIT",
   "readmeFilename": "README.md",
   "gitHead": "06eeb8cd9852f236d605f80482ba30ae3f347d0f",

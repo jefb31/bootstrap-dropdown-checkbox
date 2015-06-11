@@ -148,7 +148,7 @@ SOFTWARE.
 
     // Check or uncheck all checkbox
     this.$parent.find('.checkbox-all').on('change.dropdown-checkbox.data-api', $.proxy(function(event) {
-      this.onChangeCheckboxAll(event);
+      this.onClickCheckboxAll(event);
       this._showNbSelected();
     }, this));
 
@@ -165,8 +165,8 @@ SOFTWARE.
     }, this));
 
     this.$parent.find('.dropdown-checkbox-header').on('keyup.dropdown-checkbox.data-api', $.proxy(DropdownCheckbox.prototype.onKeyup, this));
-    this.$parent.find('ul').delegate('li input[type=checkbox]', 'change.dropdown-checkbox.data-api', $.proxy(function(event) {
-      this.onChangeCheckbox(event);
+    this.$parent.find('ul').delegate('li input[type=checkbox]', 'click.dropdown-checkbox.data-api', $.proxy(function(event) {
+      this.onClickCheckbox(event);
       this._showNbSelected();
     }, this));
 
@@ -527,7 +527,7 @@ SOFTWARE.
      * Handles a click on "select all" checkbox.
      * @param  {Event} event
      */
-    onChangeCheckboxAll: function(event) {
+    onClickCheckboxAll: function(event) {
       var isChecked = $(event.target).is(':checked');
 
       // In alternate mode, when the "check all" check box is checked, none
@@ -588,7 +588,7 @@ SOFTWARE.
      * Handles a click on a single checkbox.
      * @param {Event} event
      */
-    onChangeCheckbox: function(event) {
+    onClickCheckbox: function(event) {
       var checked = $(event.target).prop('checked');
       var id = $(event.target).parent().parent().data('id');
 

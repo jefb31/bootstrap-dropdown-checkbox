@@ -4,13 +4,13 @@ bootstrap-dropdown-checkbox
 I just got back the ownership of the repository, previously owned by the company where I started this JQuery plugin. However it wasn't maintain anymore that's why I took it back in order to work again on it. Do not hesitate to open issues or ask questions.
 
 ## Basic Dropdown Checkbox
-![alt tag](http://acquisio.github.io/bootstrap-dropdown-checkbox/images/basic_dbc.png)
+![alt tag](http://nelrohd.github.io/bootstrap-dropdown-checkbox/images/basic_dbc.png)
 
 ## Full Dropdown Checkbox with Header
-![alt tag](http://acquisio.github.io/bootstrap-dropdown-checkbox/images/full_dbc.png)
+![alt tag](http://nelrohd.github.io/bootstrap-dropdown-checkbox/images/full_dbc.png)
 
 ## Documentation
-Full documentation available at http://acquisio.github.io/bootstrap-dropdown-checkbox
+Full documentation available at http://nelrohd.github.io/bootstrap-dropdown-checkbox/
 
 ## Build Assets
 To run the build with grunt, do this inside the project folder:

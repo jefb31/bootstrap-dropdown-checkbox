@@ -20,3 +20,9 @@ npm install -g grunt-cli
 npm install
 grunt
 ```
+
+## ChangeLog
+#### Version 0.1.3
+  - Update Twitter Bootstrap to the latest version (v3.3.4).
+#### Version 0.1.0 - 0.1.2 (not maintain by myself)
+ - Initial commit

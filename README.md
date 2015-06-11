@@ -1,5 +1,7 @@
 bootstrap-dropdown-checkbox
 ===========================
+#### Note - 2015-06-11
+I just got back the ownership of the repository, previously owned by the company where I started this JQuery plugin. However it wasn't maintain anymore that's why I took it back in order to work again on it. Do not hesitate to open issues or ask questions.
 
 ## Basic Dropdown Checkbox
 ![alt tag](http://acquisio.github.io/bootstrap-dropdown-checkbox/images/basic_dbc.png)

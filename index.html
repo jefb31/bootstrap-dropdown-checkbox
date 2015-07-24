@@ -222,7 +222,7 @@
   <script src="javascripts/gatag.js"></script>
   <script>prettyPrint();</script>
   <script>
-    var tab = [
+    var data = [
       { id: "1", label: "Forever.", isChecked: true },
       { id: "2", label: "I love cheese.", isChecked: true },
       { id: "3", label: "Meat for all", isChecked: false },
@@ -239,15 +239,14 @@
       { id: "14", label: "2 times?", isChecked: true }
     ];
     $('.myDropdownCheckbox').dropdownCheckbox({
-      queryUrl: "/bootstrap-dropdown-checkbox/json/exemple_1.json",
-      data: tab,
+      data: data,
       autosearch: true,
       title: "Dropdown Checkbox",
       btnClass: "btn btn-primary",
       hideHeader: false
     });
     $('.dropdown-checkbox-example').dropdownCheckbox({
-      data: tab,
+      data: data,
       templateButton: '<a class="dropdown-checkbox-toggle" data-toggle="dropdown" href="#">Example Dropdown <span class="caret"></span></a>'
     });
   </script>
